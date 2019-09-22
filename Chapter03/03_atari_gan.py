@@ -163,7 +163,7 @@ if __name__ == "__main__":
         # train discriminator
         dis_optimizer.zero_grad()
         dis_output_true_v = net_discr(batch_v)
-        dis_output_fake_v = net_discr(gen_output_v.detach())
+        dis_output_fake_v = net_discr(gen_output_v.detach()) # why detach???
         dis_loss = objective(dis_output_true_v, true_labels_v) + objective(dis_output_fake_v, fake_labels_v)
         dis_loss.backward()
         dis_optimizer.step()

@@ -32,6 +32,7 @@ EpisodeStep = namedtuple('EpisodeStep', field_names=['observation', 'action'])
 
 
 def iterate_batches(env, net, batch_size):
+    """ Performs batch_size batches with the current policy in net"""
     batch = []
     episode_reward = 0.0
     episode_steps = []
@@ -76,7 +77,7 @@ def filter_batch(batch, percentile):
 
 if __name__ == "__main__":
     env = gym.make("CartPole-v0")
-    # env = gym.wrappers.Monitor(env, directory="mon", force=True)
+    env = gym.wrappers.Monitor(env, directory="mon", force=True)
     obs_size = env.observation_space.shape[0]
     n_actions = env.action_space.n
 

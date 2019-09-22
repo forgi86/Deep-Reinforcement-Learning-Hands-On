@@ -24,7 +24,7 @@ class Agent:
             self.transits[(self.state, action)][new_state] += 1
             self.state = self.env.reset() if is_done else new_state
 
-    def calc_action_value(self, state, action):
+    def calc_action_value(self, state, action): # compute Q(St,At)
         target_counts = self.transits[(state, action)]
         total = sum(target_counts.values())
         action_value = 0.0
@@ -33,7 +33,7 @@ class Agent:
             action_value += (count / total) * (reward + GAMMA * self.values[tgt_state])
         return action_value
 
-    def select_action(self, state):
+    def select_action(self, state): # finds a_opt = arg max_a Q(state, a)
         best_action, best_value = None, None
         for action in range(self.env.action_space.n):
             action_value = self.calc_action_value(state, action)
@@ -46,9 +46,9 @@ class Agent:
         total_reward = 0.0
         state = env.reset()
         while True:
-            action = self.select_action(state)
+            action = self.select_action(state) # find max
             new_state, reward, is_done, _ = env.step(action)
-            self.rewards[(state, action, new_state)] = reward
+            self.rewards[(state, action, new_state)] = reward # considered deterministic here!
             self.transits[(state, action)][new_state] += 1
             total_reward += reward
             if is_done:
@@ -56,7 +56,7 @@ class Agent:
             state = new_state
         return total_reward
 
-    def value_iteration(self):
+    def value_iteration(self): # value iteration step
         for state in range(self.env.observation_space.n):
             state_values = [self.calc_action_value(state, action)
                             for action in range(self.env.action_space.n)]
