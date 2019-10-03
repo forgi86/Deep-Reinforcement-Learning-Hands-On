@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.optim as optim
 
 GAMMA = 0.99
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.001
 BATCH_SIZE = 8
 
 EPSILON_START = 1.0

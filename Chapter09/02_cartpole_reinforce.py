@@ -65,9 +65,9 @@ if __name__ == "__main__":
         cur_rewards.append(exp.reward)
 
         if exp.last_state is None:
-            batch_qvals.extend(calc_qvals(cur_rewards))
+            batch_qvals.extend(calc_qvals(cur_rewards)) # contains all returns
             cur_rewards.clear()
-            batch_episodes += 1
+            batch_episodes += 1 # number of full observed episodes
 
         # handle new rewards
         new_rewards = exp_source.pop_total_rewards()
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         logits_v = net(states_v)
         log_prob_v = F.log_softmax(logits_v, dim=1)
         log_prob_actions_v = batch_qvals_v * log_prob_v[range(len(batch_states)), batch_actions_t]
-        loss_v = -log_prob_actions_v.mean()
+        loss_v = -log_prob_actions_v.mean() # this loss provides the required gradient!!
 
         loss_v.backward()
         optimizer.step()

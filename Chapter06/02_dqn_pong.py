@@ -99,7 +99,7 @@ def calc_loss(batch, net, tgt_net, device="cpu"):
     next_state_values = next_state_values.detach()
 
     expected_state_action_values = next_state_values * GAMMA + rewards_v
-    return nn.MSELoss()(state_action_values, expected_state_action_values)
+    return nn.MSELoss()(state_action_values, expected_state_action_values) # Q-learning loss
 
 
 if __name__ == "__main__":
