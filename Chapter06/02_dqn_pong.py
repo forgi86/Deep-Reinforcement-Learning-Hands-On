@@ -96,7 +96,7 @@ def calc_loss(batch, net, tgt_net, device="cpu"):
     state_action_values = net(states_v).gather(1, actions_v.unsqueeze(-1)).squeeze(-1)
     next_state_values = tgt_net(next_states_v).max(1)[0]
     next_state_values[done_mask] = 0.0
-    next_state_values = next_state_values.detach()
+    next_state_values = next_state_values.detach() # no derivative wrt this now!
 
     expected_state_action_values = next_state_values * GAMMA + rewards_v
     return nn.MSELoss()(state_action_values, expected_state_action_values)
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             continue
 
         if frame_idx % SYNC_TARGET_FRAMES == 0:
-            tgt_net.load_state_dict(net.state_dict())
+            tgt_net.load_state_dict(net.state_dict()) # target net = current net
 
         optimizer.zero_grad()
         batch = buffer.sample(BATCH_SIZE)
